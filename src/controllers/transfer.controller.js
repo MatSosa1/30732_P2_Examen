@@ -1,4 +1,5 @@
-const transferService = require('../services/transfer.service');
+const Sentry = require('@sentry/node');
+const { TransferService } = require('../services/transfer.service');
 
 /**
  * Endpoint para ejecutar una transferencia bancaria (Beta).
@@ -17,10 +18,39 @@ function executeTransfer(req, res) {
       });
     }
 
-    const result = transferService.executeTransfer(fromAccountId, toAccountId, Number(amount));
+    if (req.body.simulateDbFailure) {
+      throw new Error(
+        'Conexión interrumpida con el Clúster de Datos SecurePay'
+      );
+    }
+
+    const result = TransferService.executeTransfer(fromAccountId, toAccountId, Number(amount));
     return res.status(200).json(result);
   } catch (error) {
-    // Si la validación o deducción falla en el monolito, se maneja como error bad request.
+    const isOperationalFailure =
+      error.message ===
+      'Conexión interrumpida con el Clúster de Datos SecurePay';
+
+    if (isOperationalFailure) {
+      Sentry.captureException(error, {
+        tags: {
+          user_id: req.user?.sub || 'unknown',
+          service: 'transfer-beta',
+          error_type: 'database_failure'
+        },
+        extra: {
+          fromAccountId: req.body.fromAccountId,
+          toAccountId: req.body.toAccountId,
+          amount: req.body.amount
+        }
+      });
+
+      return res.status(500).json({
+        error: 'Error interno del servidor',
+        message: error.message
+      });
+    }
+
     return res.status(400).json({
       error: 'Error en la transacción',
       message: error.message

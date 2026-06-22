@@ -1,4 +1,4 @@
-const transactionService = require('../services/transaction.monolith.service');
+const { AccountService } = require('../services/account.service');
 
 /**
  * Endpoint para obtener el saldo actual de una cuenta (Alpha).
@@ -17,7 +17,7 @@ function getBalance(req, res) {
       });
     }
 
-    const accountInfo = transactionService.getAccountBalance(accountId);
+    const accountInfo = AccountService.getAccountBalance(accountId);
     return res.status(200).json(accountInfo);
   } catch (error) {
     return res.status(404).json({
