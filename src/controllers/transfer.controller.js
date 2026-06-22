@@ -1,4 +1,4 @@
-const transactionService = require('../services/transaction.monolith.service');
+const transferService = require('../services/transfer.service');
 
 /**
  * Endpoint para ejecutar una transferencia bancaria (Beta).
@@ -17,7 +17,7 @@ function executeTransfer(req, res) {
       });
     }
 
-    const result = transactionService.executeTransfer(fromAccountId, toAccountId, Number(amount));
+    const result = transferService.executeTransfer(fromAccountId, toAccountId, Number(amount));
     return res.status(200).json(result);
   } catch (error) {
     // Si la validación o deducción falla en el monolito, se maneja como error bad request.
