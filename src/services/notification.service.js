@@ -1,4 +1,4 @@
-export class EmailService {
+class EmailService {
   static sendDebitEmail(user, amount) {
     console.log('\n--- EMAIL DE DÉBITO ---');
     console.log(`Para: ${user.email}`);
@@ -14,3 +14,7 @@ export class EmailService {
     console.log(`Saldo actual: $${user.balance}`);
   }
 }
+
+module.exports = {
+  EmailService
+};

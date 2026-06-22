@@ -1,6 +1,6 @@
-import { UserRepository } from '../repositories/UserRepository.js';
+const { UserRepository } = require('../repositories/users.repository');
 
-export class AccountService {
+class AccountService {
   static getAccountBalance(accountId) {
     const account = UserRepository.getUser(accountId);
 
@@ -15,3 +15,7 @@ export class AccountService {
     };
   }
 }
+
+module.exports = {
+  AccountService
+};

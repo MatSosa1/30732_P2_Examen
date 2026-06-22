@@ -3,9 +3,9 @@ const usersDb = [
   { id: 'usr_002', email: 'docente.beta@espe.edu.ec', accountAlpha: 'ACC-67890', balance: 350.50 }
 ];
 
-export class UserRepository {
+class UserRepository {
   static getUser(accountId) {
-    return usersDb.find(u => u.accountAlpha === fromAccountId);
+    return usersDb.find(u => u.accountAlpha === accountId);
   }
 
   static getAccountBalance(accountId) {
@@ -32,3 +32,7 @@ export class UserRepository {
     return user;
   }
 }
+
+module.exports = {
+  UserRepository
+};

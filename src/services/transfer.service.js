@@ -1,12 +1,11 @@
-import { UserRepository } from '../repositories/UserRepository.js';
-import { TransactionRepository } from '../repositories/TransactionRepository.js';
-import { TransferValidator } from '../validators/TransferValidator.js';
-import { EmailService } from './EmailService.js';
+const { UserRepository } = require('../repositories/users.repository');
+const { TransactionRepository } = require('../repositories/transactions.repository');
+const { EmailService } = require('./notification.service');
 
-export class TransferService {
-  executeTransfer(fromAccountId, toAccountId, amount) {
-    const sender = UserRepository.findByAccount(fromAccountId);
-    const receiver = UserRepository.findByAccount(toAccountId);
+class TransferService {
+  static executeTransfer(fromAccountId, toAccountId, amount) {
+    const sender = UserRepository.getUser(fromAccountId);
+    const receiver = UserRepository.getUser(toAccountId);
 
     if (!sender) {
       throw new Error('La cuenta origen no existe.');
@@ -52,3 +51,7 @@ export class TransferService {
     };
   }
 }
+
+module.exports = {
+  TransferService
+};

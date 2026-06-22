@@ -1,6 +1,6 @@
 const transactionsHistory = [];
 
-export class TransactionRepository {
+class TransactionRepository {
   static save(transaction) {
     transactionsHistory.push(transaction);
 
@@ -11,3 +11,7 @@ export class TransactionRepository {
     return transactionsHistory;
   }
 }
+
+module.exports = {
+  TransactionRepository
+};
